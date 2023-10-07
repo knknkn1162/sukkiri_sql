@@ -60,3 +60,30 @@ select 商品名, length(商品名) as len
 from 商品
 where length(商品名) > 10
 order by len
+
+-- 41
+select 注文日,
+    right(注文番号, 4) as 注文番号
+from 注文
+
+-- 42
+update 商品
+set 商品コード = 'E' || substring(商品コード,2)
+where substring(商品コード,1,1) = 'M'
+
+-- 43
+select right(注文番号,4)
+from 注文
+order by right(注文番号,4)
+
+-- 44
+update 廃番商品
+set 廃番日 = current_date
+where 商品コード = 'S1990'
+
+-- 45
+select 商品コード,商品名,
+    単価 as 現在の単価,
+    trunc(単価 * 0.7) as 値下げした単価
+from 商品
+where 単価 >= 10000
