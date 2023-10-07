@@ -57,9 +57,9 @@ select 口座番号, 名義,
 from 口座
 
 -- 41
-select 口座番号,
-    replace(名義, '　', '') as 名義,
-    残高
+select length(口座番号),
+    length(replace(名義, '　', '')),
+    length(cast(残高 as varchar))
 from 口座
 
 -- 42
@@ -77,14 +77,15 @@ select 口座番号, 残高,
     trunc(残高*0.0002)
     as 利息
 from 口座
+order by 残高 desc
 
 -- 45
 select 口座番号, 残高,
-    case 
-        when 残高<500000 then trunc(残高*0.0001)
-        when 残高<2000000 then trunc(残高*0.0002)
-        else trunc(残高*0.0003)
-    end as 残高別利息
+    残高 * (case
+        when 残高<500000 then 0.0001
+        when 残高<2000000 then 0.0002
+        else 0.0003
+    end) as 残高別利息
 from 口座
 order by 残高別利息 desc, 口座番号
 
