@@ -127,15 +127,17 @@ where
     残高 >= 5000000
 
 -- 74
-select
-    口座.口座番号,
-    口座.名義,
-    count(*) as 回数
-from 取引
-join 口座
-on 口座.口座番号 = 取引.口座番号
-group by 口座.口座番号, 口座.名義, 日付
-having count(*) >= 3
+SELECT T.口座番号, T.回数, K.名義
+FROM 口座 AS K
+-- joinの中を副問い合わせにする
+-- T.口座番号とK.名義を両方表示できる
+JOIN (
+    SELECT 口座番号, COUNT(*) AS 回数
+    FROM 取引
+    GROUP BY 口座番号 , 日付
+    HAVING COUNT(*) >= 3
+) AS T
+ON K. 口座番号 = T. 口座番号
 
 -- 75
 select *
