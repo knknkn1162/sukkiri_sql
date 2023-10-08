@@ -72,9 +72,10 @@ set 商品コード = 'E' || substring(商品コード,2)
 where substring(商品コード,1,1) = 'M'
 
 -- 43
-select right(注文番号,4)
+select right(注文番号,4) as m
 from 注文
-order by right(注文番号,4)
+where right(注文番号,4) between '1000' and '2000'
+order by m
 
 -- 44
 update 廃番商品
