@@ -1,7 +1,7 @@
 -- 55
 select 商品コード,商品名,単価,
     (
-        select count(*)
+        select sum(数量)
         from 注文
         where 商品コード = 'S0604'
     ) as 数量
@@ -83,3 +83,12 @@ values (
     )+1,
     'A0052',2, 500
 );
+
+-- 60
+-- 追加注文に限定すればこれでもよい
+INSERT INTO 注文
+SELECT 注文日 , 注文番号 , MAX( 注文枝番 ) + 1, 'S1003', 1, NULL
+FROM 注文
+WHERE 注文日 = '2022-03-21' and
+注文番号 = '203203210080'
+GROUP BY 注文日 , 注文番号;
