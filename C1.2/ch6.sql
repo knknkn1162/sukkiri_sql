@@ -12,6 +12,7 @@ order by 注文日
 select 商品区分, min(単価), max(単価)
 from 商品
 group by 商品区分
+order by 商品区分
 
 -- 49
 select 商品コード, sum(数量)
@@ -41,6 +42,33 @@ select
     to_char(注文日, 'YYYYMM') as 年月,
     count(*) as 注文件数
 from 注文
+where 注文枝番 = 1
+group by 年月
+order by 年月
+
+-- 53.2
+select 年月, count(*)
+from (select *
+    from (select
+        to_char(注文日, 'YYYYMM') as 年月,
+        注文番号,
+        row_number() OVER (
+            PARTITION BY to_char(注文日, 'YYYYMM'), 注文番号
+        ) as idx
+    from 注文) as tb
+    where idx = 1
+) as tb2
+group by 年月
+
+-- 53.3
+select 年月, count(*) as 注文件数
+from (
+    select
+        to_char(注文日, 'YYYYMM') as 年月,
+        注文番号
+    from 注文
+    group by 年月,注文番号
+) as tb
 group by 年月
 order by 年月
 
